@@ -6,8 +6,10 @@ using System.Web.Mvc;
 
 namespace WebLogin1.Controllers
 {
+    [Authorize(Roles = "Administrador,Director" )]
     public class HomeController : Controller
     {
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
@@ -20,6 +22,7 @@ namespace WebLogin1.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

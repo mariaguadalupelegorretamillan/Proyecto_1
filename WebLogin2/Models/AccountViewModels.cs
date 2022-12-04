@@ -79,6 +79,9 @@ namespace WebLogin1.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [StringLength(120)]
+        public string LugarDeNacimiento { get; set; }
     }
 
     public class ResetPasswordViewModel

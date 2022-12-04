@@ -16,10 +16,22 @@ namespace WebLogin1
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            await EnviarCorreoAsync(message);            
+        }
+
+        private async Task EnviarCorreoAsync(IdentityMessage message)
+        {
+            MailSender ms = new MailSender();
+
+            if (await ms.sendMail(message.Destination, message.Subject, message.Body))
+                Console.WriteLine("Email enviado correctamente");
+            else
+                Console.WriteLine("Error al enviar Email");
+
+            await Task.Delay(1000);
         }
     }
 
@@ -53,7 +65,7 @@ namespace WebLogin1
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
+                RequiredLength = 8,
                 RequireNonLetterOrDigit = true,
                 RequireDigit = true,
                 RequireLowercase = true,
@@ -62,8 +74,8 @@ namespace WebLogin1
 
             // Configure user lockout defaults
             manager.UserLockoutEnabledByDefault = true;
-            manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            manager.MaxFailedAccessAttemptsBeforeLockout = 5;
+            manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(1);
+            manager.MaxFailedAccessAttemptsBeforeLockout = 3;
 
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
             // You can write your own provider and plug it in here.
